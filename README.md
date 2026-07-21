@@ -49,7 +49,7 @@ npm run dev
 3. Instance Type 選 **Free**。
 4. 設定環境變數：
    - `GOOGLE_MAPS_API_KEY`：你的金鑰
-   - `ALLOWED_ORIGIN`：`https://hitorigs.github.io/4g-camping-checker`
+   - `ALLOWED_ORIGIN`：`https://hitorigs.github.io`（**不要加路徑**——瀏覽器送出的 `Origin` header 只有網域，不含路徑，加了路徑會導致 CORS 比對失敗）
    - `UPSTASH_REDIS_REST_URL` / `UPSTASH_REDIS_REST_TOKEN`：選填
 5. 建立後等它 build 完成，記下服務網址（例如 `https://camping-signal-checker-backend.onrender.com`）。
 
