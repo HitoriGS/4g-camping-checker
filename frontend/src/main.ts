@@ -66,6 +66,35 @@ function renderError(message: string) {
   resultSection.appendChild(errorBox);
 }
 
+/**
+ * 逾時時不要清空畫面重畫成錯誤訊息——已經查到的部分結果（例如中華電信卡片、
+ * 已解析出的地點資訊）應該保留在畫面上，只在下方附加一個提示，並提供「繼續等待」
+ * 讓使用者可以選擇再等一輪，而不是被迫重新整個查詢一次。
+ */
+function appendTimeoutNotice(onContinue: () => void) {
+  const existingNotice = resultSection.querySelector(".timeout-notice");
+  existingNotice?.remove();
+
+  const notice = document.createElement("div");
+  notice.className = "timeout-notice error-box";
+
+  const text = document.createElement("p");
+  text.textContent =
+    "查詢時間比預期久（可能是伺服器剛甦醒或電信網站回應較慢），上面顯示的是目前已經查到的部分結果。";
+  notice.appendChild(text);
+
+  const continueButton = document.createElement("button");
+  continueButton.type = "button";
+  continueButton.textContent = "繼續等待剩餘結果";
+  continueButton.addEventListener("click", () => {
+    notice.remove();
+    onContinue();
+  });
+  notice.appendChild(continueButton);
+
+  resultSection.appendChild(notice);
+}
+
 function renderResult(status: JobStatusResponse) {
   resultSection.innerHTML = "";
   const result = status.result;
@@ -128,6 +157,37 @@ function renderResult(status: JobStatusResponse) {
   );
 }
 
+async function pollAndRender(
+  jobId: string,
+  isHealthy: boolean,
+  loadingSteps: HTMLElement,
+): Promise<void> {
+  try {
+    const finalStatus = await pollLookup(jobId, (status) => {
+      updateLoadingSteps(loadingSteps, status.step, !isHealthy && status.status !== "done");
+      if (status.result) {
+        renderResult(status);
+        resultSection.appendChild(loadingSteps);
+      }
+    });
+
+    if (finalStatus.status === "error") {
+      renderError(finalStatus.error ?? "查詢時發生錯誤，請稍後再試。");
+      return;
+    }
+    renderResult(finalStatus);
+  } catch (err) {
+    if (err instanceof LookupTimeoutError) {
+      appendTimeoutNotice(() => {
+        void pollAndRender(jobId, isHealthy, loadingSteps);
+      });
+    } else {
+      const message = err instanceof Error ? err.message : "發生未知錯誤";
+      renderError(message);
+    }
+  }
+}
+
 async function handleSubmit(event: SubmitEvent) {
   event.preventDefault();
   const rawName = input.value;
@@ -150,27 +210,10 @@ async function handleSubmit(event: SubmitEvent) {
   try {
     const isHealthy = await checkHealth();
     const jobId = await startLookup(name);
-
-    const finalStatus = await pollLookup(jobId, (status) => {
-      updateLoadingSteps(loadingSteps, status.step, !isHealthy && status.status !== "done");
-      if (status.result) {
-        renderResult(status);
-        resultSection.appendChild(loadingSteps);
-      }
-    });
-
-    if (finalStatus.status === "error") {
-      renderError(finalStatus.error ?? "查詢時發生錯誤，請稍後再試。");
-      return;
-    }
-    renderResult(finalStatus);
+    await pollAndRender(jobId, isHealthy, loadingSteps);
   } catch (err) {
-    if (err instanceof LookupTimeoutError) {
-      renderError("查詢超過等待時間，伺服器可能忙碌中，請稍後再試一次。");
-    } else {
-      const message = err instanceof Error ? err.message : "發生未知錯誤";
-      renderError(message);
-    }
+    const message = err instanceof Error ? err.message : "發生未知錯誤";
+    renderError(message);
   } finally {
     submitButton.disabled = false;
   }

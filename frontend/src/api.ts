@@ -35,7 +35,10 @@ export async function startLookup(name: string): Promise<string> {
 }
 
 const POLL_INTERVAL_MS = 2500;
-const MAX_POLL_MS = 100_000;
+// Render 免費方案冷啟動 + 3 家電信截圖判讀 + Google 評論擷取全部跑完，
+// 實測可能落在 1-2 分鐘，100 秒太短會在真的查完之前就先逾時，
+// 拉長到 3 分鐘給足夠的緩衝。
+const MAX_POLL_MS = 180_000;
 
 export async function pollLookup(
   jobId: string,

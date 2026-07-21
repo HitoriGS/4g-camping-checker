@@ -348,6 +348,27 @@ body {
   color: var(--color-weak);
 }
 
+.timeout-notice {
+  background: color-mix(in srgb, var(--color-fair) 14%, var(--color-surface));
+  border-color: var(--color-fair);
+  color: var(--color-text);
+}
+
+.timeout-notice p {
+  margin: 0 0 0.75rem;
+  color: var(--color-text-muted);
+}
+
+.timeout-notice button {
+  padding: 0.5rem 1rem;
+  border-radius: var(--radius);
+  border: 1px solid var(--color-primary);
+  background: transparent;
+  color: var(--color-primary);
+  font-weight: 600;
+  cursor: pointer;
+}
+
 .disclaimer {
   margin-top: 3rem;
   padding-top: 1.5rem;
