@@ -1,56 +1,40 @@
 {
   "CHT": {
-    "4G": {
-      "calibrated": false,
-      "levels": [
-        { "label": "室外優", "level": "good", "hex": "#1E3C96" },
-        { "label": "室外可", "level": "fair", "hex": "#4FA8E0" },
-        { "label": "室外弱/無資料", "level": "weak", "hex": "#B8D8F0" }
-      ]
-    },
-    "5G": {
-      "calibrated": false,
-      "levels": [
-        { "label": "室外優/良", "level": "good", "hex": "#123E7A" },
-        { "label": "室外可/弱", "level": "fair", "hex": "#63B8FF" },
-        { "label": "室外弱/無資料", "level": "weak", "hex": "#CFE8FF" }
-      ]
-    }
+    "calibrated": true,
+    "calibratedAt": "2026-07-21",
+    "tiers": [
+      { "hex": "#00B9EF", "label": "5G室外優/良(4G室外優/良)", "band4G": "good", "band5G": "good" },
+      { "hex": "#00FFFF", "label": "5G室外可/弱(4G室外優/良)", "band4G": "good", "band5G": "weak" },
+      { "hex": "#00FF00", "label": "4G室外優", "band4G": "good", "band5G": "weak" },
+      { "hex": "#0000FF", "label": "4G室外良", "band4G": "fair", "band5G": "weak" },
+      { "hex": "#FFFF00", "label": "4G室外可", "band4G": "weak", "band5G": "weak" },
+      { "hex": "#FF0000", "label": "4G室外弱", "band4G": "weak", "band5G": "weak" },
+      { "hex": "#FFFFFF", "label": "無服務", "band4G": "weak", "band5G": "weak" }
+    ]
   },
   "TWM": {
-    "4G": {
-      "calibrated": false,
-      "levels": [
-        { "label": "優", "level": "good", "hex": "#E8590C" },
-        { "label": "可", "level": "fair", "hex": "#FFA94D" },
-        { "label": "弱/無資料", "level": "weak", "hex": "#FFD8A8" }
-      ]
-    },
-    "5G": {
-      "calibrated": false,
-      "levels": [
-        { "label": "優", "level": "good", "hex": "#862E9C" },
-        { "label": "可", "level": "fair", "hex": "#BE4BDB" },
-        { "label": "弱/無資料", "level": "weak", "hex": "#EEBEFA" }
-      ]
-    }
+    "calibrated": true,
+    "calibratedAt": "2026-07-21",
+    "tiers": [
+      { "hex": "#FF6700", "label": "5G室外優良/4G室外優良", "band4G": "good", "band5G": "good" },
+      { "hex": "#FFE3DD", "label": "5G室外弱~尚可/4G室外優良", "band4G": "good", "band5G": "weak" },
+      { "hex": "#03FF00", "label": "4G室外優良", "band4G": "good", "band5G": "weak" },
+      { "hex": "#0000FF", "label": "4G室外良好", "band4G": "fair", "band5G": "weak" },
+      { "hex": "#FFFF00", "label": "4G室外尚可", "band4G": "weak", "band5G": "weak" },
+      { "hex": "#FF0000", "label": "4G室外弱", "band4G": "weak", "band5G": "weak" }
+    ]
   },
   "FET": {
-    "4G": {
-      "calibrated": false,
-      "levels": [
-        { "label": "優", "level": "good", "hex": "#2B8A3E" },
-        { "label": "可", "level": "fair", "hex": "#69DB7C" },
-        { "label": "弱/無資料", "level": "weak", "hex": "#D3F9D8" }
-      ]
-    },
-    "5G": {
-      "calibrated": false,
-      "levels": [
-        { "label": "優", "level": "good", "hex": "#0B7285" },
-        { "label": "可", "level": "fair", "hex": "#3BC9DB" },
-        { "label": "弱/無資料", "level": "weak", "hex": "#C5F6FA" }
-      ]
-    }
+    "calibrated": true,
+    "calibratedAt": "2026-07-21",
+    "tiers": [
+      { "hex": "#0EB5BE", "label": "5G室外優/良 4G室外優/良", "band4G": "good", "band5G": "good" },
+      { "hex": "#FD7927", "label": "5G室外可/弱 4G室外優/良", "band4G": "good", "band5G": "weak" },
+      { "hex": "#00FF00", "label": "4G室外優", "band4G": "good", "band5G": "weak" },
+      { "hex": "#0000FF", "label": "4G室外良", "band4G": "fair", "band5G": "weak" },
+      { "hex": "#FFFF00", "label": "4G室外可", "band4G": "weak", "band5G": "weak" },
+      { "hex": "#FF0000", "label": "4G室外弱", "band4G": "weak", "band5G": "weak" },
+      { "hex": "#AAAAAA", "label": "無服務", "band4G": "weak", "band5G": "weak" }
+    ]
   }
 }

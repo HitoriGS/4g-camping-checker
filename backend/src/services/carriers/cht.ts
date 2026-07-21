@@ -1,5 +1,5 @@
 import { openPage } from "../../browser/launchBrowser.js";
-import { classifySamplePixels, samplePixelsAround } from "./colorMatcher.js";
+import { classifyJointSamplePixels, samplePixelsAround } from "./colorMatcher.js";
 import colorLegends from "../../config/colorLegends.json" with { type: "json" };
 import type { CarrierResult } from "../../types.js";
 import { logger } from "../../utils/logger.js";
@@ -77,14 +77,13 @@ export async function checkCHTCoverage(lat: number, lng: number): Promise<Carrie
       throw new Error("像素取樣失敗");
     }
 
-    const band4G = classifySamplePixels(pixels, colorLegends.CHT["4G"].levels as any);
-    const band5G = classifySamplePixels(pixels, colorLegends.CHT["5G"].levels as any);
+    const classified = classifyJointSamplePixels(pixels, colorLegends.CHT.tiers as any);
 
     return {
       carrier: "CHT",
       displayName,
-      band4G: band4G.level,
-      band5G: band5G.level,
+      band4G: classified.band4G,
+      band5G: classified.band5G,
       note: "以地圖疊圖顏色自動判讀，僅供參考",
     };
   } catch (err) {

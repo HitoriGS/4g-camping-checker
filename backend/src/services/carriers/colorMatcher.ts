@@ -1,5 +1,5 @@
 import sharp from "sharp";
-import type { ColorLegendLevel, CoverageLevel } from "../../types.js";
+import type { CoverageLevel, JointColorTier } from "../../types.js";
 import { logger } from "../../utils/logger.js";
 
 interface Rgb {
@@ -64,56 +64,68 @@ function labDistance(a: Lab, b: Lab): number {
   return Math.sqrt((a.L - b.L) ** 2 + (a.a - b.a) ** 2 + (a.b - b.b) ** 2);
 }
 
-export interface ClassifyResult {
-  level: CoverageLevel;
+export interface JointClassifyResult {
+  band4G: CoverageLevel;
+  band5G: CoverageLevel;
   label: string;
   distance: number;
 }
 
+const UNKNOWN_RESULT: JointClassifyResult = {
+  band4G: "unknown",
+  band5G: "unknown",
+  label: "無法判讀",
+  distance: Infinity,
+};
+
 /**
  * 對一小塊區域的多個像素做多數決分類，避開單一像素被文字/圖標/反鋸齒干擾的問題。
+ * 三家電信的圖例都是「一個顏色 = 一組 4G+5G 等級」的聯合圖例（見校色記錄），
+ * 所以一次分類直接回傳 band4G 與 band5G 兩個值，而不是分開比對兩份色票。
  */
-export function classifySamplePixels(
+export function classifyJointSamplePixels(
   pixels: Rgb[],
-  legend: ColorLegendLevel[],
-): ClassifyResult {
-  const votes = new Map<CoverageLevel, { count: number; label: string; totalDistance: number }>();
+  tiers: JointColorTier[],
+): JointClassifyResult {
+  const votes = new Map<string, { count: number; result: JointClassifyResult }>();
 
   for (const pixel of pixels) {
     const pixelLab = rgbToLab(pixel);
-    let best: { level: CoverageLevel; label: string; distance: number } | null = null;
+    let best: { tier: JointColorTier; distance: number } | null = null;
 
-    for (const legendLevel of legend) {
-      const distance = labDistance(pixelLab, rgbToLab(hexToRgb(legendLevel.hex)));
+    for (const tier of tiers) {
+      const distance = labDistance(pixelLab, rgbToLab(hexToRgb(tier.hex)));
       if (!best || distance < best.distance) {
-        best = { level: legendLevel.level, label: legendLevel.label, distance };
+        best = { tier, distance };
       }
     }
 
     if (!best) continue;
-    const resolvedLevel: CoverageLevel =
-      best.distance > UNKNOWN_DISTANCE_THRESHOLD ? "unknown" : best.level;
-    const resolvedLabel = best.distance > UNKNOWN_DISTANCE_THRESHOLD ? "無法判讀" : best.label;
+    const isUnknown = best.distance > UNKNOWN_DISTANCE_THRESHOLD;
+    const result: JointClassifyResult = isUnknown
+      ? { ...UNKNOWN_RESULT, distance: best.distance }
+      : {
+          band4G: best.tier.band4G,
+          band5G: best.tier.band5G,
+          label: best.tier.label,
+          distance: best.distance,
+        };
 
-    const existing = votes.get(resolvedLevel);
+    const key = `${result.band4G}:${result.band5G}:${result.label}`;
+    const existing = votes.get(key);
     if (existing) {
       existing.count += 1;
-      existing.totalDistance += best.distance;
     } else {
-      votes.set(resolvedLevel, { count: 1, label: resolvedLabel, totalDistance: best.distance });
+      votes.set(key, { count: 1, result });
     }
   }
 
-  let winner: { level: CoverageLevel; label: string; distance: number } = {
-    level: "unknown",
-    label: "無法判讀",
-    distance: Infinity,
-  };
+  let winner = UNKNOWN_RESULT;
   let winnerVotes = -1;
-  for (const [level, data] of votes) {
-    if (data.count > winnerVotes) {
-      winnerVotes = data.count;
-      winner = { level, label: data.label, distance: data.totalDistance / data.count };
+  for (const { count, result } of votes.values()) {
+    if (count > winnerVotes) {
+      winnerVotes = count;
+      winner = result;
     }
   }
 

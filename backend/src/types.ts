@@ -81,14 +81,14 @@ export interface Job {
   updatedAt: number;
 }
 
-export interface ColorLegendLevel {
+/**
+ * 三家電信的涵蓋率地圖實測後發現都是「一個顏色同時代表一組 4G+5G 等級」的
+ * 聯合圖例（見 docs/RECON_NOTES.md 校色記錄），不是 4G/5G 各自獨立的色票，
+ * 所以一個色階要同時帶出 band4G 與 band5G 兩個結果。
+ */
+export interface JointColorTier {
   label: string;
-  level: CoverageLevel;
   hex: string;
-}
-
-export interface ColorLegend {
-  carrier: CarrierId;
-  band: "4G" | "5G";
-  levels: ColorLegendLevel[];
+  band4G: CoverageLevel;
+  band5G: CoverageLevel;
 }
