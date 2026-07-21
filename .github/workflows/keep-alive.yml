@@ -1,0 +1,20 @@
+name: Ping backend to reduce cold starts
+
+on:
+  schedule:
+    # 只在台灣時間傍晚到深夜（常見露營直播規劃時段，UTC 10:00-16:00 = 台灣 18:00-24:00）
+    # 每 12 分鐘 ping 一次，讓 Render 免費方案在這段時間不容易進入休眠。
+    - cron: "*/12 10-16 * * *"
+  workflow_dispatch:
+
+jobs:
+  ping:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Ping /api/health
+        run: |
+          if [ -z "${{ vars.VITE_API_BASE_URL }}" ]; then
+            echo "尚未設定 VITE_API_BASE_URL repository variable，略過。"
+            exit 0
+          fi
+          curl -sf "${{ vars.VITE_API_BASE_URL }}/api/health" || echo "後端目前無法連線（可能還在喚醒中）"

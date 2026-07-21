@@ -1,0 +1,56 @@
+{
+  "CHT": {
+    "4G": {
+      "calibrated": false,
+      "levels": [
+        { "label": "室外優", "level": "good", "hex": "#1E3C96" },
+        { "label": "室外可", "level": "fair", "hex": "#4FA8E0" },
+        { "label": "室外弱/無資料", "level": "weak", "hex": "#B8D8F0" }
+      ]
+    },
+    "5G": {
+      "calibrated": false,
+      "levels": [
+        { "label": "室外優/良", "level": "good", "hex": "#123E7A" },
+        { "label": "室外可/弱", "level": "fair", "hex": "#63B8FF" },
+        { "label": "室外弱/無資料", "level": "weak", "hex": "#CFE8FF" }
+      ]
+    }
+  },
+  "TWM": {
+    "4G": {
+      "calibrated": false,
+      "levels": [
+        { "label": "優", "level": "good", "hex": "#E8590C" },
+        { "label": "可", "level": "fair", "hex": "#FFA94D" },
+        { "label": "弱/無資料", "level": "weak", "hex": "#FFD8A8" }
+      ]
+    },
+    "5G": {
+      "calibrated": false,
+      "levels": [
+        { "label": "優", "level": "good", "hex": "#862E9C" },
+        { "label": "可", "level": "fair", "hex": "#BE4BDB" },
+        { "label": "弱/無資料", "level": "weak", "hex": "#EEBEFA" }
+      ]
+    }
+  },
+  "FET": {
+    "4G": {
+      "calibrated": false,
+      "levels": [
+        { "label": "優", "level": "good", "hex": "#2B8A3E" },
+        { "label": "可", "level": "fair", "hex": "#69DB7C" },
+        { "label": "弱/無資料", "level": "weak", "hex": "#D3F9D8" }
+      ]
+    },
+    "5G": {
+      "calibrated": false,
+      "levels": [
+        { "label": "優", "level": "good", "hex": "#0B7285" },
+        { "label": "可", "level": "fair", "hex": "#3BC9DB" },
+        { "label": "弱/無資料", "level": "weak", "hex": "#C5F6FA" }
+      ]
+    }
+  }
+}

@@ -1,0 +1,45 @@
+<!doctype html>
+<html lang="zh-Hant">
+  <head>
+    <meta charset="UTF-8" />
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>露營區 4G/5G 訊號檢查器</title>
+    <meta
+      name="description"
+      content="輸入露營區名稱，查詢台灣三大電信 4G/5G 涵蓋率與 Google 評論中的網路狀況，判斷是否適合直播。"
+    />
+  </head>
+  <body>
+    <div id="app">
+      <header class="page-header">
+        <h1>露營區 4G/5G 訊號檢查器</h1>
+        <p class="page-subtitle">
+          輸入露營區名稱，自動查中華電信／台灣大哥大／遠傳的涵蓋率，加上 Google
+          評論裡提到網路訊號的內容，幫你判斷適不適合直播。
+        </p>
+      </header>
+
+      <form id="lookup-form" class="lookup-form">
+        <input
+          id="campsite-input"
+          type="text"
+          name="campsite"
+          placeholder="輸入露營區名稱，例如：陽光露營區"
+          autocomplete="off"
+          required
+        />
+        <button id="lookup-submit" type="submit">查詢</button>
+      </form>
+
+      <p id="throttle-notice" class="throttle-notice" hidden></p>
+
+      <section id="result-section" class="result-section" hidden></section>
+
+      <footer class="disclaimer">
+        本結果由自動化圖像判讀與網頁評論擷取產生，可能有誤差或因網站改版而失效，僅供出發前參考，正式訊號狀況請以現場實測為準。
+      </footer>
+    </div>
+    <script type="module" src="/src/main.ts"></script>
+  </body>
+</html>
