@@ -42,15 +42,24 @@ npm run dev
 
 ### 後端（Render）
 
-1. 在 Render 建立新的 Web Service，選擇這個 repo 的 `backend/` 目錄（或用 `backend/render.yaml` 的 Blueprint）。
-2. 設定環境變數：`GOOGLE_MAPS_API_KEY`、`ALLOWED_ORIGIN`（填你的 GitHub Pages 網域，例如 `https://your-username.github.io`）、`UPSTASH_REDIS_REST_URL`、`UPSTASH_REDIS_REST_TOKEN`。
-3. 部署完成後記下服務網址（例如 `https://xxx.onrender.com`）。
+用 Render Dashboard 手動建立最不容易出錯：
+
+1. 到 [Render Dashboard](https://dashboard.render.com/) → **New +** → **Web Service**，選擇 GitHub repo `HitoriGS/4g-camping-checker`（第一次要先授權 Render 存取你的 GitHub）。
+2. **Root Directory** 填 `backend`；**Runtime** 選 `Docker`；Dockerfile Path 用預設的 `Dockerfile` 即可。
+3. Instance Type 選 **Free**。
+4. 設定環境變數：
+   - `GOOGLE_MAPS_API_KEY`：你的金鑰
+   - `ALLOWED_ORIGIN`：`https://hitorigs.github.io/4g-camping-checker`
+   - `UPSTASH_REDIS_REST_URL` / `UPSTASH_REDIS_REST_TOKEN`：選填
+5. 建立後等它 build 完成，記下服務網址（例如 `https://camping-signal-checker-backend.onrender.com`）。
+
+（repo 根目錄也放了 `render.yaml`，如果你想改用 Blueprint 一鍵部署也可以，效果一樣，只是環境變數一樣要手動填。）
 
 ### 前端（GitHub Pages）
 
-1. 在 repo 的 Settings → Pages，Source 選 "GitHub Actions"。
-2. 在 Settings → Secrets and variables → Actions → Variables，新增 `VITE_API_BASE_URL`，填上一步拿到的 Render 後端網址。
-3. push 到 `main` 分支會自動觸發 `.github/workflows/deploy-frontend.yml` 部署。
+1. 到 repo 的 Settings → Pages，**Source** 選 "GitHub Actions"。
+2. 到 Settings → Secrets and variables → Actions → **Variables** 分頁，新增 repository variable `VITE_API_BASE_URL`，填上一步拿到的 Render 後端網址（不要加結尾斜線）。
+3. push 到 `main` 分支（或到 Actions 分頁手動觸發 `Deploy frontend to GitHub Pages`）會自動部署，完成後網址是 `https://hitorigs.github.io/4g-camping-checker/`。
 
 ### Phase 4 色票校正（首次部署前必做）
 

@@ -2,6 +2,7 @@ services:
   - type: web
     name: camping-signal-checker-backend
     runtime: docker
+    rootDir: backend
     dockerfilePath: ./Dockerfile
     plan: free
     healthCheckPath: /api/health
